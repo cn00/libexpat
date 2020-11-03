@@ -45,28 +45,10 @@
 #include <stddef.h> /* ptrdiff_t */
 #include <ctype.h>
 #include <limits.h>
-
-#if defined(_WIN32) && defined(_MSC_VER) && (_MSC_VER < 1600)
-/* For vs2003/7.1 up to vs2008/9.0; _MSC_VER 1600 is vs2010/10.0 */
-#  if defined(_WIN64)
-typedef __int64 intptr_t;
-#  else
-typedef __int32 intptr_t;
-#  endif
-typedef unsigned __int64 uint64_t;
-#else
-#  include <stdint.h> /* intptr_t uint64_t */
-#endif
+#include <stdint.h> /* intptr_t uint64_t */
 
 #if ! defined(__cplusplus)
-#  if defined(_MSC_VER) && (_MSC_VER <= 1700)
-/* for vs2012/11.0/1700 and earlier Visual Studio compilers */
-#    define bool int
-#    define false 0
-#    define true 1
-#  else
-#    include <stdbool.h>
-#  endif
+#  include <stdbool.h>
 #endif
 
 #include "expat.h"
@@ -108,7 +90,7 @@ typedef unsigned __int64 uint64_t;
 
 static XML_Parser g_parser = NULL;
 
-void
+static void
 tcase_add_test__ifdef_xml_dtd(TCase *tc, tcase_test_function test) {
 #ifdef XML_DTD
   tcase_add_test(tc, test);
@@ -7365,7 +7347,7 @@ START_TEST(test_misc_version) {
     fail("Version mismatch");
 
 #if ! defined(XML_UNICODE) || defined(XML_UNICODE_WCHAR_T)
-  if (xcstrcmp(version_text, XCS("expat_2.2.9"))) /* needs bump on releases */
+  if (xcstrcmp(version_text, XCS("expat_2.2.10"))) /* needs bump on releases */
     fail("XML_*_VERSION in expat.h out of sync?\n");
 #else
   /* If we have XML_UNICODE defined but not XML_UNICODE_WCHAR_T
